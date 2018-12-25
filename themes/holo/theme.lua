@@ -16,7 +16,7 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local theme                                     = {}
 theme.default_dir                               = require("awful.util").get_themes_dir() .. "default"
 theme.icon_dir                                  = os.getenv("HOME") .. "/.config/awesome/themes/holo/icons"
-theme.wallpaper                                 = os.getenv("HOME") .. "/.config/awesome/themes/holo/wall.png"
+--theme.wallpaper                                 = os.getenv("HOME") .. "/.config/awesome/themes/holo/wall.png"
 theme.font                                      = "Roboto Bold 10"
 theme.taglist_font                              = "Roboto Condensed Regular 8"
 theme.fg_normal                                 = "#FFFFFF"
@@ -92,8 +92,21 @@ theme.titlebar_maximized_button_normal_inactive = theme.default_dir.."/titlebar/
 theme.titlebar_maximized_button_focus_inactive  = theme.default_dir.."/titlebar/maximized_focus_inactive.png"
 theme.titlebar_maximized_button_normal_active   = theme.default_dir.."/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active    = theme.default_dir.."/titlebar/maximized_focus_active.png"
+--theme.musicplr = string.format("%s -e ncmpcpp", awful.util.terminal)
 
-theme.musicplr = string.format("%s -e ncmpcpp", awful.util.terminal)
+local wallpapers = {}
+local populateWallpapers = function()
+    local i, popen = 0, io.popen
+    for filename in popen([[find "/home/lovek323/Dropbox/Apps/IFTTT/wallpapers" -type f]]):lines() do
+        i = i + 1
+        wallpapers[i] = filename
+    end
+end
+populateWallpapers()
+
+theme.wallpaper = function(screen)
+    return wallpapers[math.random(1, #wallpapers)]
+end
 
 local markup = lain.util.markup
 local blue   = "#80CCE6"
